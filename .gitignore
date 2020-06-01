@@ -1,4 +1,6 @@
 *.csv
 *.png
 *.pyc
-
+dist/*
+build/*
+*.egg-info*
