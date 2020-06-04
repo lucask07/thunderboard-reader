@@ -57,12 +57,14 @@ if __name__ == '__main__':
 
 	if sensor_to_display == 'AmbLight':
 		sensor_to_display = 'Amb light'
+	if sensor_to_display == 'HALL':
+		sensor_to_display = 'HALL: Mag'
 	if sensor_to_display == 'UVIndex':
 		sensor_to_display = 'UV Index'
 
 	# fix sensor keys to match the strings from the Thunderboard
 	sensor_keys = ['TVOC', 'Pressure', 'SoundLevel', 'Amb light', 
-			  	  'eCO2', 'HALL', 'Temp', 'Humidity', 'UV Index']
+			  	  'eCO2', 'HALL: Mag', 'Temp', 'Humidity', 'UV Index']
 
 	def TimestampMillisec64():
 	    return int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000) 
@@ -72,8 +74,21 @@ if __name__ == '__main__':
 
 	import serial.tools.list_ports
 	ports = list(serial.tools.list_ports.comports())
+	
+	pid = '1366'
+	hid = '1015'
+
+	for p in ports:
+		#print('Serial port found:')
+		#print(p[1])
+		#print('Port pid and hid')
+		#print(p.hwid)
+		hwid_save = p.hwid
+		if pid and hid in p.hwid:
+			print('Found the Thunderboard device to open with PID = {} and HID = {}!'.format(pid, hid))
 	try:
-		ser_addr = [x for x in ports if x[1]=='J-Link OB'][0][0]
+		# ser_addr = [x for x in ports if x[1]=='J-Link OB'][0][0]
+		ser_addr = [x for x in ports if pid and hid in x.hwid][0][0]
 	except IndexError:
 		print('No serial address found.\n Is the thunderboard connected using USB?') 
 		if os_platform in ['Darwin', 'Linux']:
@@ -114,9 +129,14 @@ if __name__ == '__main__':
 
 	while(elapsed_time < run_time):
 		t = str(ser.readline())
-		if len(t) == 3:
-			print('Serial read timeout. \n Is the bluetooth app connected and diplaying Environmental data?')
-			sys.exit(2)		
+		print(t)  # add this
+		
+		# Remove for iOS 
+#		if len(t) == 3:
+#			print('Serial read timeout. \n Is the bluetooth app connected AND diplaying Environmental data?')
+#			# close serial port
+#			ser.close()
+#			sys.exit(2)		
 		
 		elapsed_time = (TimestampMillisec64() - t_start) / 1000
 

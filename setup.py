@@ -9,7 +9,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="thunderboard-reader", # Replace with your own username
-    version="0.1.0",
+    version="0.1.1",
     author="Lucas J. Koerner",
     author_email="koerner.lucas@stthomas.edu",
     # entry_points={'console_scripts': [
