@@ -29,6 +29,17 @@ python3 -m pip install thunderboard-reader
 
 Connect the Thunderboard to your computer via USB. Next, launch the mobile phone app, connect to the thunderboard, and startup the environment sensing data. Then within the same terminal / command prompt try these commands. 
 
+On a MAC or Linux
+```
+tboard_read.py --help
+
+tboard_read.py --sensor Temp
+
+tboard_read.py --sensor all
+
+tboard_read.py --sensor eCO2 --time 5
+```
+
 ```
 python tboard_read.py --help
 
